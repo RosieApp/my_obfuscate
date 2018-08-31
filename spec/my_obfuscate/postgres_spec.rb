@@ -52,11 +52,21 @@ describe MyObfuscate::Postgres do
   end
 
   describe "#parse_copy_statement" do
-    it 'parses table name and column names' do
-      line = "COPY some_table (id, email, name, something) FROM stdin;"
-      hash = helper.parse_copy_statement(line)
-      expect(hash[:table_name]).to eq(:some_table)
-      expect(hash[:column_names]).to eq([:id, :email, :name, :something])
+    context 'for a Postgres 9.x dump' do
+      it 'parses table name and column names' do
+        line = "COPY some_table (id, email, name, something) FROM stdin;"
+        hash = helper.parse_copy_statement(line)
+        expect(hash[:table_name]).to eq(:some_table)
+        expect(hash[:column_names]).to eq([:id, :email, :name, :something])
+      end
+    end
+    context 'for a Postres 10.x dump' do
+      it 'parses table name and column names' do
+        line = "COPY some_schema.some_table (id, email, name, something) FROM stdin;"
+        hash = helper.parse_copy_statement(line)
+        expect(hash[:table_name]).to eq(:some_table)
+        expect(hash[:column_names]).to eq([:id, :email, :name, :something])
+      end
     end
   end
 

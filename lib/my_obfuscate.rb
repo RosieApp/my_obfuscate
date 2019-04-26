@@ -77,6 +77,7 @@ class MyObfuscate
   end
 
   def extra_column_list(table_name, columns)
+    return [] if [:truncate, :keep].include?(config[table_name])
     config_columns = (config[table_name] || {}).keys
     config_columns - columns
   end
@@ -94,6 +95,7 @@ class MyObfuscate
   end
 
   def missing_column_list(table_name, columns)
+    return [] if [:truncate, :keep].include?(config[table_name])
     config_columns = (config[table_name] || {}).keys
     columns - (config_columns + (globally_kept_columns || []).map {|i| i.to_sym}).uniq
   end

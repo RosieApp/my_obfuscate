@@ -77,6 +77,7 @@ class MyObfuscate
   end
 
   def extra_column_list(table_name, columns)
+    return [] if config[table_name] == :truncate
     config_columns = (config[table_name] || {}).keys
     config_columns - columns
   end
